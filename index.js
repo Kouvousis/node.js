@@ -1,7 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const express = require("express");
 const app = express();
-const port = 3000;
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger");
 const cors = require("cors");
@@ -14,10 +13,6 @@ mongoose.connect(process.env.MONGODB_URI).then(
     console.log("Failed to connect to MongoDB");
   }
 );
-
-app.listen(port, () => {
-  console.log("Server is running");
-});
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -39,3 +34,5 @@ app.use("/api/user-product", userProduct);
 
 const product = require("./routes/product.routes");
 app.use("/api/products", product);
+
+module.exports = app;
