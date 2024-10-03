@@ -266,6 +266,53 @@ exports.options = {
         },
       },
     },
+    "/api/users-products/{username}/products/{id}": {
+      patch: {
+        tags: ["Users and Products"],
+        description: "Update user's products",
+        parameters: [
+          {
+            name: "username",
+            in: "path",
+            required: true,
+            description: "Username of user",
+            type: "String",
+          },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            description: "Id of product to update",
+            type: "String",
+          },
+        ],
+        requestBody: {
+          description: "Quantity of product to update",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  product: {
+                    type: "object",
+                    properties: {
+                      quantity: {
+                        type: "number",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Update product from user",
+          },
+        },
+      },
+    },
   },
 };
 
