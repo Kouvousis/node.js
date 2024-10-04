@@ -17,6 +17,14 @@ afterEach(async () => {
   await mongoose.connection.close();
 });
 
-describe("For /api/users/ requests", () => {});
+describe("Tests for /api/users/ requests", () => {
+  it("GET /api/users", async () => {
+    const res = await request(app).get("/api/users");
 
-describe("For /api/users/:username requests", () => {});
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBeTruthy();
+    expect(res.body.data.length).toBeGreaterThan(0);
+  }, 10000); // 10000 is milliseconds until timeout
+});
+
+describe("For /api/users/{username} requests", () => {});
