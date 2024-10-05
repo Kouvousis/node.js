@@ -1,5 +1,6 @@
 const m2s = require("mongoose-to-swagger");
 const User = require("./models/user.model");
+const Product = require("./models/product.model");
 const { patch } = require("./routes/user.routes");
 const { response } = require("express");
 
@@ -18,6 +19,7 @@ exports.options = {
   components: {
     schemas: {
       User: m2s(User),
+      Product: m2s(Product),
     },
   },
   servers: [
@@ -37,7 +39,11 @@ exports.options = {
     },
     {
       name: "Users and Products",
-      description: "Request for user products",
+      description: "Requests for user products",
+    },
+    {
+      name: "Products",
+      description: "Requests for product",
     },
   ],
   paths: {
@@ -266,7 +272,7 @@ exports.options = {
         },
       },
     },
-    "/api/users-products/{username}/products/{id}": {
+    "/api/user-product/{username}/products/{id}": {
       patch: {
         tags: ["Users and Products"],
         description: "Update user's products",
@@ -309,6 +315,158 @@ exports.options = {
         responses: {
           200: {
             description: "Update product from user",
+          },
+        },
+      },
+      delete: {
+        tags: ["Users and Products"],
+        description: "Delete product from a user",
+        parameters: [
+          {
+            name: "username",
+            in: "path",
+            required: true,
+            description: "Username of the user whose product we want to delete",
+            type: "string",
+          },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            description: "The id of the product we want to delete",
+            type: "string",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Delete product of user",
+          },
+        },
+      },
+    },
+    "/api/products/": {
+      get: {
+        tags: ["Products"],
+        description: "Returns all products",
+        responses: {
+          200: {
+            description: "List of all products",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: {
+                    $ref: "#components/schemas/Product",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ["Products"],
+        description: "Create new product",
+        requestBody: {
+          description: "Data of the product we create",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  product: { type: "string" },
+                  cost: { type: "number" },
+                  description: { type: "string" },
+                  quantity: { type: "number" },
+                },
+                required: ["product", "cost", "quantity"],
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "New product created",
+          },
+        },
+      },
+    },
+    "/api/products/{product}": {
+      get: {
+        tags: ["Products"],
+        parameters: [
+          {
+            name: "product",
+            in: "path",
+            required: true,
+            description: "Name of the product you want to find",
+            type: "string",
+          },
+        ],
+        description: "Search if product with specific name exists",
+        responses: {
+          200: {
+            description: "Product result",
+            schema: {
+              $ref: "#components/schemas/Product",
+            },
+          },
+        },
+      },
+    },
+    "/api/products/{id}": {
+      patch: {
+        tags: ["Products"],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            description: "Id of the product to be updated",
+            type: "string",
+          },
+        ],
+        requestBody: {
+          description: "Product to update",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  product: { type: "string" },
+                  cost: { type: "number" },
+                  description: { type: "string" },
+                  quantity: { type: "number" },
+                },
+                required: ["cost", "quantity"],
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Update product",
+            schema: {
+              $ref: "#components/schema/Product",
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ["Products"],
+        description: "Delete a product",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            description: "Id of the product to be deleted",
+            type: "string",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Delete Product",
           },
         },
       },
