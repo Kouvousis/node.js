@@ -94,6 +94,8 @@ describe("Tests for /api/users/{username} requests", () => {
       });
     expect(res.status).toBe(200);
     expect(res.body.status).toBeTruthy();
+    console.log(res.body);
+
     expect(res.body.data.name).toBe("new test4");
     expect(res.body.data.surname).toBe("new test4");
   });
