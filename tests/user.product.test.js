@@ -21,7 +21,7 @@ afterEach(async () => {
 });
 
 describe("Tests for /api/user-product/users/products requests", () => {
-  it("GET for /api/user-product/users/products", async () => {
+  it("GET for /api/user-product/uesrs/products", async () => {
     const res = await request(app).get("/api/user-product/users/products");
 
     expect(res.statusCode).toBe(200);
@@ -66,11 +66,8 @@ describe("Test for /api/user-product/{username}/products/{id}", () => {
   it("PATCH for /api/user-product/{username}/products/{id}", async () => {
     let result = await helpers.findLastInsertedUser();
     const username = result.username;
-    // const result = await helpers.findUsersProduct('user3', "6706a68541695504ff534811")
     const product = await helpers.findUsersProduct(username);
-    // username = result.username;
-    // id = result.products[0]._id;
-    id = product.products[0]._id;
+    let id = product.products[0]._id;
     const res = await request(app)
       .patch("/api/user-product/" + username + "/products/" + id)
       .send({
@@ -80,7 +77,6 @@ describe("Test for /api/user-product/{username}/products/{id}", () => {
         },
       });
     result = await helpers.findLastInsertedUser();
-    // console.log(result);
     expect(res.statusCode).toBe(200);
     expect(result.products[0].quantity).toBe(180);
   });

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
 const app = require("../index");
+
 const helpers = require("../services/user.service");
 
 beforeEach(async () => {
@@ -17,17 +18,15 @@ beforeEach(async () => {
 afterEach(async () => {
   await mongoose.connection.close();
 });
-
-describe("Tests for /api/users/ requests", () => {
-  it("GET /api/users requests", async () => {
+describe("Tests for /api/users requests", () => {
+  it("GET /api/users", async () => {
     const res = await request(app).get("/api/users");
-
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBeTruthy();
     expect(res.body.data.length).toBeGreaterThan(0);
-  }, 10000); // 10000 is milliseconds until timeout
+  }, 10000);
 
-  it("POST /api/users requests", async () => {
+  it("POST /api/users request", async () => {
     const res = await request(app)
       .post("/api/users")
       .send({
@@ -41,13 +40,12 @@ describe("Tests for /api/users/ requests", () => {
           road: "road66",
         },
       });
-
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBeTruthy();
     expect(res.body.data).toBeTruthy();
   });
 
-  it("POST /api/users requests checks for existing user", async () => {
+  it("POST /api/users request check for existed user", async () => {
     const res = await request(app)
       .post("/api/users")
       .send({
@@ -61,7 +59,6 @@ describe("Tests for /api/users/ requests", () => {
           road: "road66",
         },
       });
-
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBeFalsy();
   });
@@ -70,7 +67,6 @@ describe("Tests for /api/users/ requests", () => {
 describe("Tests for /api/users/{username} requests", () => {
   it("GET /api/users/{username}", async () => {
     const result = await helpers.findLastInsertedUser();
-    console.log(result.username);
     const res = await request(app).get("/api/users/" + result.username);
 
     expect(res.statusCode).toBe(200);
@@ -99,7 +95,7 @@ describe("Tests for /api/users/{username} requests", () => {
     expect(res.body.data.surname).toBe("new test4");
   });
 
-  it("DELETE /api/users/{usernames}", async () => {
+  it("DELETE /api/users/{username}", async () => {
     const result = await helpers.findLastInsertedUser();
     const res = await request(app).delete("/api/users/" + result.username);
 
