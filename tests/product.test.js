@@ -83,7 +83,7 @@ describe("Tests for /api/products/{id} requests", () => {
 
   it("DELETE /api/products/{id}", async () => {
     const result = await helpers.findLastInsertedProduct();
-    const res = await request(app).delete("/api/users/" + result._id);
+    const res = await request(app).delete("/api/products/" + result._id);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBeTruthy();
