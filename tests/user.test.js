@@ -80,22 +80,21 @@ describe("Tests for /api/users/{username} requests", () => {
   });
 
   it("PATCH for /api/users/{username}", async () => {
-    const result = await helpers.findLastInsertedUser();
+    let result = await helpers.findLastInsertedUser();
     const res = await request(app)
       .patch("/api/users/" + result.username)
       .send({
         name: "new test4",
         surname: "new test4",
-        email: "newTest4@aueb.gr",
+        email: "xxx@aueb.gr",
         address: {
           area: "new area",
           road: "new road",
         },
       });
-    expect(res.status).toBe(200);
-    expect(res.body.status).toBeTruthy();
-    console.log(res.body);
 
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBeTruthy();
     expect(res.body.data.name).toBe("new test4");
     expect(res.body.data.surname).toBe("new test4");
   });
